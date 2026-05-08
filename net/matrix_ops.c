@@ -44,7 +44,7 @@ matrix *apply_activation(matrix *a, activation activation)
 
         for (int i = 0; i < a->rows; i++)
         {
-            a->arr[i][0] /= sum;
+            a->arr[i][0] = exp(a->arr[i][0]) / sum;
         }
     }
     return a;
@@ -108,7 +108,7 @@ matrix *matrix_mult(matrix *a, matrix *b)
 
     out->arr = malloc(sizeof(double *) * out->rows);
     assert(out->arr);
-    for (int i = 0; i < out->cols; i++)
+    for (int i = 0; i < out->rows; i++)
     {
         (out->arr)[i] = malloc(sizeof(double) * out->cols);
         assert(out->arr);
@@ -121,7 +121,7 @@ matrix *matrix_mult(matrix *a, matrix *b)
             double sum = 0;
             for (int j = 0; j < a->cols; j++)
             {
-                sum += a->arr[i][j] + b->arr[j][k];
+                sum += a->arr[i][j] * b->arr[j][k];
             }
             out->arr[i][k] = sum;
         }

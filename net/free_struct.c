@@ -4,36 +4,34 @@
 #include <math.h>
 #include <assert.h>
 
-void free_matrix(matrix **a)
+void free_matrix(matrix *a)
 {
-    matrix *b = *a;
-    for (int i = 0; i < b->rows; i++)
+    for (int i = 0; i < a->rows; i++)
     {
-        free(b->arr[i]);
+        free(a->arr[i]);
     }
-    free(b->arr);
+    free(a->arr);
 
-    b->arr = NULL;
-    free(b);
+    a->arr = NULL;
+    free(a);
 }
 
-void free_layer(layer **a)
+void free_layer(layer *a)
 {
-    layer *b = *a;
 
-    for (int i = 0; i < b->size; i++)
+    for (int i = 0; i < a->size; i++)
     {
-        free(b->neurons[i]);
+        free_neuron(&a->neurons[i]);
     }
-    free(b->neurons);
-    b->neurons = NULL;
-    free(b);
+    free(a->neurons);
+    a->neurons = NULL;
+    free(a);
 }
 
-void free_neuron(neuron **a)
+void free_neuron(neuron *a)
 {
-    neuron *b = *a;
-    free(b->weights);
-    b->weights = NULL;
-    free(b);
+    assert(a);
+    free(a->weights);
+    a->weights = NULL;
+    a->weight_size = 0;
 }

@@ -12,7 +12,7 @@ double sigmoid(double inp)
 
 double ReLU(double inp)
 {
-    inp > 0.0 ? inp : 0.0;
+    return inp > 0.0 ? inp : 0.0;
 }
 
 double *softmax(double *vals, int size)
@@ -27,7 +27,7 @@ double *softmax(double *vals, int size)
     assert(ret);
     for (int i = 0; i < size; i++)
     {
-        ret[i] = vals[i] / sum;
+        ret[i] = exp(vals[i]) / sum;
     }
     return ret;
 }

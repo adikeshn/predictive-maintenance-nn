@@ -44,7 +44,7 @@ layer *evaluate(net net, double *init_data, int init_data_size)
 
         for (int j = 0; j < updated->rows; j++)
         {
-            updated->arr[j][0] += curr.neurons[i].bias;
+            updated->arr[j][0] += curr.neurons[j].bias;
         }
         apply_activation(updated, curr.activation);
 
