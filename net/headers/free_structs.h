@@ -4,8 +4,8 @@
 #include <stdio.h>
 #include "structs.h"
 
-void free_matrix(matrix **a);
-void free_layer(layer **a);
-void free_neuron(neuron **a);
-
+void free_matrix(matrix *a);
+void free_layer(layer *a);
+void free_neuron(neuron *a);
+void free_net(net *a);
 #endif

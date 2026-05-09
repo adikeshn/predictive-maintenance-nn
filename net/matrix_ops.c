@@ -1,9 +1,11 @@
 #include "headers/structs.h"
 #include "headers/matrix_ops.h"
+#include "headers/activations.h"
 
 #include <stdio.h>
 #include <math.h>
 #include <assert.h>
+#include <stdlib.h>
 
 layer *create_layer(matrix *inp)
 {

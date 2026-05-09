@@ -5,10 +5,10 @@
 
 typedef enum activation
 {
-    RELU,
-    SOFTMAX,
-    SIGMOID,
-    NONE
+    RELU = 0,
+    SOFTMAX = 1,
+    SIGMOID = 2,
+    NONE = 3
 } activation;
 
 typedef struct matrix
@@ -37,6 +37,7 @@ typedef struct net
 {
     layer *layers;
     int num_layers;
+    int num_features;
 } net;
 
 #endif

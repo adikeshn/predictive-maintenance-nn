@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <math.h>
 #include <assert.h>
+#include <stdlib.h>
 
 void free_matrix(matrix *a)
 {
@@ -25,13 +26,22 @@ void free_layer(layer *a)
     }
     free(a->neurons);
     a->neurons = NULL;
-    free(a);
 }
 
 void free_neuron(neuron *a)
 {
-    assert(a);
     free(a->weights);
     a->weights = NULL;
     a->weight_size = 0;
+}
+
+void free_net(net *a)
+{
+    for (int i = 0; i < a->num_layers; i++)
+    {
+        free_layer(&a->layers[i]);
+    }
+    free(a->layers);
+    a->layers = NULL;
+    free(a);
 }
