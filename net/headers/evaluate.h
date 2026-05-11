@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include "structs.h"
 
-layer *evaluate(net *net, layer *features);
+net *forward_pass(net *net, layer *features);
+net *back_prop(net *net, layer *exp, double learning_rate);
 
 #endif

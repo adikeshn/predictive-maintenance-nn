@@ -11,6 +11,19 @@ typedef enum activation
     NONE = 3
 } activation;
 
+typedef enum cost_funcs
+{
+    CATEGORICAL_CROSS_ENTROPY = 0,
+    BINARY_CROSS_ENTROPY = 1,
+    NONE = 2,
+} cost_funcs;
+
+typedef struct cost
+{
+    double cost;
+    cost_funcs type;
+} cost;
+
 typedef struct matrix
 {
     double **arr;

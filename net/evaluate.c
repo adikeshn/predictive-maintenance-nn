@@ -3,12 +3,14 @@
 #include "headers/activations.h"
 #include "headers/free_structs.h"
 #include "headers/evaluate.h"
+#include "headers/cost.h"
+
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
 #include <assert.h>
 
-layer *evaluate(net *net, layer *features)
+net *forward_pass(net *net, layer *features)
 {
     assert(net);
 
@@ -34,11 +36,56 @@ layer *evaluate(net *net, layer *features)
         }
         apply_activation(updated, curr.activation);
 
-        free_layer(prev);
-        free(prev);
-        prev = create_layer(updated);
+        prev = create_layer(updated, &curr);
         free_matrix(updated);
         updated = NULL;
     }
     return prev;
+}
+
+net *back_prop(net *net, layer *features, layer *exp, double learning_rate)
+{
+    assert(net);
+    int layer_index = net->num_layers - 1;
+    layer *curr;
+    int *prev_weights;
+    for (int i = 0; i < net->num_layers; i++)
+    {
+        curr = &net->layers[layer_index - i];
+        int weight_size = curr->neurons[0].weight_size;
+        int *weights = malloc(sizeof(int) * curr->size * weight_size);
+        for (int j = 0; j < curr->size; j++)
+        {
+            if (i == 0)
+            {
+                curr->neurons[j].value = cost_dev(curr->neurons[j].value, exp->neurons[j].value);
+            }
+            else
+            {
+                double partial = 0.0;
+                for (int z = 0; z < (curr + 1)->size; z++)
+                {
+                    partial += prev_weights[z * curr->size + j] * (curr + 1)->neurons[z].value;
+                }
+                if (curr->activation == SIGMOID)
+                {
+                    partial *= deriv_sigmoid(curr->neurons[j].value);
+                }
+                else if (curr->activation == ReLU)
+                {
+                    partial *= deriv_ReLU(curr->neurons[j].value);
+                }
+                curr->neurons[j].value = partial;
+            }
+            for (int z = 0; z < weight_size; z++)
+            {
+                weights[j * weight_size + weight_size] = curr->neurons[j].weights[z];
+                double partial_weight = (i == net->num_layers - 1) ? features->neurons[z].value : (curr - 1)->neurons[z].value;
+                curr->neurons[j].weights[z] -= learning_rate * partial_weight * curr->neurons[j].value;
+            }
+            curr->neurons[j].bias -= learning_rate * curr->neurons[j].value;
+        }
+        free(prev_weights);
+        prev_weights = weights;
+    }
 }

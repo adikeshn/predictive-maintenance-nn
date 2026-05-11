@@ -5,6 +5,7 @@
 
 double sigmoid(double inp);
 double ReLU(double inp);
-double *softmax(double *vals, int size);
+double deriv_ReLU(double inp);
+double deriv_sigmoid(double activ);
 
 #endif

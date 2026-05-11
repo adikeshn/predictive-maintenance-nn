@@ -11,24 +11,17 @@ double sigmoid(double inp)
     return 1 / (1 + exp(-inp));
 }
 
+double deriv_sigmoid(double activ)
+{
+    return activ * (1 - activ);
+}
+
 double ReLU(double inp)
 {
     return inp > 0.0 ? inp : 0.0;
 }
 
-double *softmax(double *vals, int size)
+double deriv_ReLU(double inp)
 {
-    double sum = 0;
-    for (int i = 0; i < size; i++)
-    {
-        sum += exp(vals[i]);
-    }
-
-    double *ret = malloc(sizeof(double) * size);
-    assert(ret);
-    for (int i = 0; i < size; i++)
-    {
-        ret[i] = exp(vals[i]) / sum;
-    }
-    return ret;
+    return inp > 0.0 ? 1.0 : 0.0;
 }

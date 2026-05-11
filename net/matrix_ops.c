@@ -7,23 +7,17 @@
 #include <assert.h>
 #include <stdlib.h>
 
-layer *create_layer(matrix *inp)
+layer *create_layer(matrix *inp, layer *layer)
 {
     neuron *neurons = malloc(sizeof(neuron) * inp->rows);
     assert(neurons);
 
     for (int i = 0; i < inp->rows; i++)
     {
-        neurons[i].value = inp->arr[i][0];
+        layer->neurons[i].value = inp->arr[i][0];
     }
 
-    layer *out = malloc(sizeof(layer));
-    assert(inp);
-
-    out->activation = NONE;
-    out->size = inp->rows;
-    out->neurons = neurons;
-    return out;
+    return layer;
 }
 
 matrix *apply_activation(matrix *a, activation activation)
