@@ -9,5 +9,6 @@ matrix *get_weights_matrix(layer curr, layer prev);
 matrix *get_feature_matrix(layer prev);
 matrix *apply_activation(matrix *a, activation activation);
 layer *create_layer(matrix *inp, layer *layer);
+layer *get_feature_layer(double *entry, int size);
 
 #endif

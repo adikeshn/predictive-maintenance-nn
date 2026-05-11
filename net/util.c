@@ -1,5 +1,5 @@
 #include "headers/structs.h"
-#include "headers/matrix_ops.h"
+#include "headers/util.h"
 #include "headers/activations.h"
 
 #include <stdio.h>
@@ -7,10 +7,17 @@
 #include <assert.h>
 #include <stdlib.h>
 
+layer *get_feature_layer(double *entry, int size)
+{
+    layer *layer = malloc(sizeof(layer));
+    layer->size = size;
+    layer->activation = NONE;
+    layer->neurons = entry;
+    return layer;
+}
+
 layer *create_layer(matrix *inp, layer *layer)
 {
-    neuron *neurons = malloc(sizeof(neuron) * inp->rows);
-    assert(neurons);
 
     for (int i = 0; i < inp->rows; i++)
     {
