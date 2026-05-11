@@ -88,4 +88,5 @@ net *back_prop(net *net, layer *features, layer *exp, double learning_rate)
         free(prev_weights);
         prev_weights = weights;
     }
+    return net;
 }
