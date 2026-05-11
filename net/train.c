@@ -60,6 +60,7 @@ net *train_batch(double **training_data, int features, double **training_output,
         for (int j = 0; j < sums_net->layers[i].size; j++)
         {
             memset(sums_net->layers[i].neurons[j].weights, 0.0, sums_net->layers[i].neurons[j].weight_size * sizeof(double));
+            sums_net->layers[i].neurons[j].bias = 0.0;
         }
     }
 
@@ -68,7 +69,7 @@ net *train_batch(double **training_data, int features, double **training_output,
         double *entry = training_data[i];
         layer *features_layer = get_feature_layer(entry, features);
         forward_pass(model, features_layer);
-        layer *exp = get_feature_layer(training_output[i], exp);
+        layer *exp = get_feature_layer(training_output[i], output_size);
         back_prop(sums_net, model, features_layer, exp, rate);
         free_layer(features_layer);
         free(features_layer);
@@ -85,7 +86,7 @@ net *train_batch(double **training_data, int features, double **training_output,
             model->layers[i].neurons[j].bias += sums_net->layers[i].neurons[j].bias / batch_size;
             for (int z = 0; z < model->layers[i].neurons->weight_size; z++)
             {
-                model->layers[i].neurons[j].weights[z] += sums_net->layers[i].neurons[j].weights[z] / batch_size;
+                model->layers[i].neurons[j].weights[z] -= sums_net->layers[i].neurons[j].weights[z] / batch_size;
             }
         }
     }

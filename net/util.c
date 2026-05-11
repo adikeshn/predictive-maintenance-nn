@@ -12,7 +12,9 @@ layer *get_feature_layer(double *entry, int size)
     layer *layer = malloc(sizeof(layer));
     layer->size = size;
     layer->activation = NONE;
-    layer->neurons = entry;
+    layer->neurons = malloc(sizeof(neuron) * size);
+    for (int i = 0; i < size; i++)
+        layer->neurons[i].value = entry[i];
     return layer;
 }
 
