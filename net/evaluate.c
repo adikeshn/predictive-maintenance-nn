@@ -22,12 +22,18 @@ double eval(net *net, double **X, double **y, int num_entries)
         layer *pred = forward_pass(net, f_layer);
         if (num_output == 1)
         {
-            cost += binary_cross_entropy(pred, o_layer);
+            cost += binary_cross_entropy(pred, o_layer, 16.67, 0.52);
         }
         else
         {
             cost += categorical_cross_entropy(pred, o_layer);
         }
+        free_layer(f_layer);
+        free(f_layer);
+        free_layer(o_layer);
+        free(o_layer);
+        f_layer = NULL;
+        o_layer = NULL;
     }
     return cost / num_entries;
 }

@@ -19,12 +19,12 @@ double categorical_cross_entropy(layer *pred, layer *exp)
     return -c;
 }
 
-double binary_cross_entropy(layer *pred, layer *exp)
+double binary_cross_entropy(layer *pred, layer *exp, double true_weight, double false_weight)
 {
     double prediction = pred->neurons[0].value;
     double expected = exp->neurons[0].value;
 
-    return -(expected * log(prediction) + (1 - expected) * log(1 - prediction));
+    return -(true_weight * expected * log(prediction) + false_weight * (1 - expected) * log(1 - prediction));
 }
 
 double cost_dev(double pred, double exp)

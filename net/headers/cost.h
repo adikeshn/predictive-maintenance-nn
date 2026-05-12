@@ -6,6 +6,6 @@
 
 double categorical_cross_entropy(layer *pred, layer *exp);
 double cost_dev(double pred, double exp);
-double binary_cross_entropy(layer *pred, layer *exp);
+double binary_cross_entropy(layer *pred, layer *exp, double true_weight, double false_weight);
 
 #endif

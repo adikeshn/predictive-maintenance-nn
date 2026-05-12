@@ -31,7 +31,7 @@ int main()
     double *means = malloc(sizeof(double) * num_features);
     double *stds = malloc(sizeof(double) * num_features);
     normalize(X, num_entries, num_features, means, stds);
-
+    fisher_shuffle(X, y, num_entries);
     net *model = train_model(init, epochs, batch_size, num_entries, X,
                              num_features, y, neurons_each_layer[num_layers - 1], learning_rate, train_percent);
 
