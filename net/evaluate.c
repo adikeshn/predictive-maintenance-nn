@@ -36,8 +36,11 @@ net *forward_pass(net *net, layer *features)
         }
         apply_activation(updated, curr->activation);
 
-        free_layer(prev);
-        free(prev);
+        if (prev != features)
+        {
+            free_layer(prev);
+            free(prev);
+        }
         prev = create_layer(updated, curr);
         free_matrix(updated);
         updated = NULL;

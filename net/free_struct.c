@@ -45,3 +45,12 @@ void free_net(net *a)
     a->layers = NULL;
     free(a);
 }
+
+void free_2D(double ***arr, int rows)
+{
+    for (int i = 0; i < rows; i++)
+    {
+        free(arr[i]);
+    }
+    free(arr);
+}

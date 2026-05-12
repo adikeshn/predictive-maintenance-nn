@@ -27,9 +27,11 @@ int main()
     double **y = NULL;
     load_data(&X, &y, num_entries, num_features, neurons_each_layer[num_layers - 1]);
     net *model = train_model(init, epochs, batch_size, num_entries, X, num_features, y, neurons_each_layer[num_layers - 1], learning_rate);
-    write_net("model.bin", init);
+    write_net("model.bin", model);
     net *read = read_net("model.bin");
 
     free_net(init);
     free_net(read);
+    free_2D(&X, num_entries);
+    free_2D(&y, num_entries);
 }
