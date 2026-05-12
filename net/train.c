@@ -32,7 +32,6 @@ net *train_model(net *model, int epochs, int batch_size, int num_entries, double
                  int num_features, double **training_output, int output_size, double rate)
 {
     assert(model);
-    srandom(time(NULL));
 
     net *sums_net = malloc(sizeof(net));
     sums_net->num_features = model->num_features;
@@ -103,6 +102,9 @@ double train_batch(double **training_data, int features, double **training_outpu
         free_layer(exp_layer);
         free(exp_layer);
         exp_layer = NULL;
+        free_layer(pred);
+        free(pred);
+        pred = NULL;
     }
 
     for (int i = 0; i < model->num_layers; i++)
@@ -117,5 +119,5 @@ double train_batch(double **training_data, int features, double **training_outpu
         }
     }
 
-    return cost;
+    return cost / batch_size;
 }

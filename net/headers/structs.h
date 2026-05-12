@@ -15,7 +15,7 @@ typedef enum cost_funcs
 {
     CATEGORICAL_CROSS_ENTROPY = 0,
     BINARY_CROSS_ENTROPY = 1,
-    NONE = 2,
+    EMPTY = 2,
 } cost_funcs;
 
 typedef struct matrix

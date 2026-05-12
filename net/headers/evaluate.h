@@ -5,6 +5,6 @@
 #include "structs.h"
 
 net *forward_pass(net *net, layer *features);
-net *back_prop(net *sums, net *net, layer *features, layer *exp, double learning_rate)
+net *back_prop(net *sums, net *net, layer *features, layer *exp, double learning_rate);
 
 #endif

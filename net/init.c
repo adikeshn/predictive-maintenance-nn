@@ -7,10 +7,16 @@
 
 double random_double(double min, double max)
 {
-    double scale = (double)rand() / (double)RAND_MAX;
+    double scale = (double)random() / (double)RAND_MAX;
     return min + scale * (max - min);
 }
 
+double xavier_weight(int n_in, int n_out)
+{
+
+    double limit = sqrt(6.0 / (n_in + n_out));
+    return random_double(-limit, limit);
+}
 double he_random_weight(int input_size)
 {
     assert(input_size > 0);
@@ -104,10 +110,56 @@ net *gen_rand(int num_features, int num_hidden, int *hidden_neurons, activation 
             curr->neurons[j].bias = 0.0;
             for (int z = 0; z < prev_size; z++)
             {
-                curr->neurons[j].weights[z] = he_random_weight(prev_size);
+                if (curr->activation == SIGMOID || curr->activation == SOFTMAX)
+                {
+                    curr->neurons[j].weights[z] = xavier_weight(prev_size, curr->size);
+                }
+                else if (curr->activation == RELU)
+                {
+                    curr->neurons[j].weights[z] = he_random_weight(prev_size);
+                }
             }
         }
         prev_size = curr->size;
     }
     return out;
+}
+
+void load_data(double ***X, double ***y, int num_entries, int num_features, int num_output)
+{
+
+    *X = malloc(sizeof(double *) * num_entries);
+    *y = malloc(sizeof(double *) * num_entries);
+    assert(*X);
+    assert(*y);
+    for (int i = 0; i < num_entries; i++)
+    {
+        (*X)[i] = malloc(sizeof(double) * num_features);
+        (*y)[i] = malloc(sizeof(double) * num_output);
+        assert((*X)[i]);
+        assert((*y)[i]);
+    }
+
+    FILE *fp = fopen("ai412020.csv", "r");
+    assert(fp);
+    fscanf(fp, "%*[^\n]");
+    int i = 0;
+    if (num_output == 1)
+    {
+        while (i < num_entries && fscanf(fp, "%*d,%*[^,],%*[^,],%lf,%lf,%lf,%lf,%lf,%lf,%*[^\n]",
+                                         (*X)[i], (*X)[i] + 1, (*X)[i] + 2,
+                                         (*X)[i] + 3, (*X)[i] + 4, (*y)[i]) == num_features + num_output)
+        {
+            i++;
+        }
+    }
+    else if (num_output == 5)
+    {
+        while (i < num_entries && fscanf(fp, "%*d,%*[^,],%*[^,],%lf,%lf,%lf,%lf,%lf,%*lf,%lf,%lf,%lf,%lf,%lf\n",
+                                         (*X)[i], (*X)[i] + 1, (*X)[i] + 2, (*X)[i] + 3, (*X)[i] + 4,
+                                         (*y)[i], (*y)[i] + 1, (*y)[i] + 2, (*y)[i] + 3, (*y)[i] + 4) == num_features + num_output)
+        {
+            i++;
+        }
+    }
 }

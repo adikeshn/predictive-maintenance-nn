@@ -2,6 +2,7 @@
 #include "headers/evaluate.h"
 #include "headers/free_structs.h"
 #include "headers/structs.h"
+#include "headers/train.h"
 
 #include <stdio.h>
 #include <math.h>
@@ -11,13 +12,21 @@
 
 int main()
 {
-    srand(time(NULL));
+    srandom(0);
     int num_features = 5;
-    int num_layers = 2;
-    int neurons[2] = {5, 5};
-    activation actives[2] = {RELU, SOFTMAX};
+    int num_layers = 3;
+    int neurons_each_layer[3] = {16, 16, 1};
+    int epochs = 5;
+    int batch_size = 30;
+    double learning_rate = 0.001;
+    activation actives[3] = {RELU, RELU, SIGMOID};
+    net *init = gen_rand(num_features, num_layers, neurons_each_layer, actives, BINARY_CROSS_ENTROPY);
 
-    net *init = gen_rand(num_features, num_layers, neurons, actives);
+    int num_entries = 10000;
+    double **X = NULL;
+    double **y = NULL;
+    load_data(&X, &y, num_entries, num_features, neurons_each_layer[num_layers - 1]);
+    net *model = train_model(init, epochs, batch_size, num_entries, X, num_features, y, neurons_each_layer[num_layers - 1], learning_rate);
     write_net("model.bin", init);
     net *read = read_net("model.bin");
 
