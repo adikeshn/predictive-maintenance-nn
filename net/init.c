@@ -143,7 +143,7 @@ void load_data(double ***X, double ***y, int num_entries, int num_features, int 
         assert((*y)[i]);
     }
 
-    FILE *fp = fopen("ai412020.csv", "r");
+    FILE *fp = fopen("ai4i2020.csv", "r");
     assert(fp);
     fscanf(fp, "%*[^\n]");
     int i = 0;

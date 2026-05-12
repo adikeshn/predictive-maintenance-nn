@@ -3,7 +3,7 @@ CFLAGS = -Wall -Werror -g
 
 BUILD_DIR = build
 
-SRC = main.c init.c evaluate.c free_struct.c cost.c activations.c matrix_ops.c
+SRC = main.c init.c evaluate.c free_struct.c cost.c activations.c util.c train.c
 OBJ = $(SRC:%.c=$(BUILD_DIR)/%.o)
 
 TARGET = activitynet

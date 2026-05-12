@@ -10,7 +10,7 @@
 #include <stdlib.h>
 #include <assert.h>
 
-net *forward_pass(net *net, layer *features)
+layer *forward_pass(net *net, layer *features)
 {
     assert(net);
 

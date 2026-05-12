@@ -4,6 +4,7 @@
 #include "headers/structs.h"
 #include "headers/cost.h"
 #include "headers/util.h"
+#include "headers/train.h"
 
 #include <stdio.h>
 #include <math.h>
@@ -53,14 +54,19 @@ net *train_model(net *model, int epochs, int batch_size, int num_entries, double
     {
         fisher_shuffle(training_features, training_output, num_entries);
         int batches = 0;
+        int total_batches = num_entries % batch_size == 0 ? num_entries / batch_size : num_entries / batch_size + 1;
+        double avg_cost = 0.0;
         for (int j = 0; j < num_entries; j += batch_size)
         {
             int batch = j + batch_size >= num_entries ? num_entries - j : batch_size;
             double cost = train_batch((training_features + j), num_features, (training_output + j), output_size, batch, model, sums_net, rate);
-            printf("\rEpoch %d/%d, Batch %d, Loss %.6f", i + 1, epochs, batches, cost);
-            fflush(stdout);
+            avg_cost += cost;
             batches++;
+            printf("\rEpoch %d/%d, Batch %d/%d, Loss %.6f", i + 1, epochs, batches, total_batches, cost);
+            fflush(stdout);
         }
+        printf("\rEpoch %d/%d, Batch %d/%d, Loss %.6f", i + 1, epochs, batches, total_batches, avg_cost / total_batches);
+        printf("\n");
     }
 
     free_net(sums_net);

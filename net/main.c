@@ -17,9 +17,9 @@ int main()
     int num_features = 5;
     int num_layers = 3;
     int neurons_each_layer[3] = {16, 16, 1};
-    int epochs = 5;
-    int batch_size = 30;
-    double learning_rate = 0.001;
+    int epochs = 50;
+    int batch_size = 32;
+    double learning_rate = 0.01;
     activation actives[3] = {RELU, RELU, SIGMOID};
     net *init = gen_rand(num_features, num_layers, neurons_each_layer, actives, BINARY_CROSS_ENTROPY);
 
@@ -38,4 +38,6 @@ int main()
     free_net(read);
     free_2D(&X, num_entries);
     free_2D(&y, num_entries);
+    free(means);
+    free(stds);
 }
