@@ -11,14 +11,32 @@
 #include <stdlib.h>
 #include <time.h>
 
+double tr_weight = 14.7;
+double fl_weight = 0.52;
+void train_models();
+void test_models();
+
 int main()
 {
-    srandom(0);
+    train_models();
+}
+void test_models()
+{
+    net *model = read_net("model.bin");
+
+    /**/
+
+    free_net(model);
+    model = NULL;
+}
+void train_models()
+{
+    srandom(2);
     int num_features = 5;
     int num_layers = 3;
-    int neurons_each_layer[3] = {16, 16, 1};
-    int epochs = 50;
-    int batch_size = 32;
+    int neurons_each_layer[3] = {64, 32, 1};
+    int epochs = 70;
+    int batch_size = 64;
     double learning_rate = 0.01;
     double train_percent = 0.8;
     activation actives[3] = {RELU, RELU, SIGMOID};
@@ -36,10 +54,8 @@ int main()
                              num_features, y, neurons_each_layer[num_layers - 1], learning_rate, train_percent);
 
     write_net("model.bin", model);
-    net *read = read_net("model.bin");
 
     free_net(init);
-    free_net(read);
     free_2D(&X, num_entries);
     free_2D(&y, num_entries);
     free(means);

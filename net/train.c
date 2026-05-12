@@ -62,12 +62,13 @@ net *train_model(net *model, int epochs, int batch_size, int num_entries, double
     {
         fisher_shuffle(training_features, training_output, train_size);
         int batches = 0;
+        double rate_decay = rate * (1.0 / (1.0 + 0.01 * i));
         int total_batches = train_size % batch_size == 0 ? train_size / batch_size : train_size / batch_size + 1;
         double avg_cost = 0.0;
         for (int j = 0; j < train_size; j += batch_size)
         {
             int batch = j + batch_size >= train_size ? train_size - j : batch_size;
-            double cost = train_batch((training_features + j), num_features, (training_output + j), output_size, batch, model, sums_net, rate);
+            double cost = train_batch((training_features + j), num_features, (training_output + j), output_size, batch, model, sums_net, rate_decay);
             avg_cost += cost;
             batches++;
             printf("\rEpoch %d/%d, Batch %d/%d, Tr_Loss %.6f            ", i + 1, epochs, batches, total_batches, cost);
@@ -105,7 +106,7 @@ double train_batch(double **training_data, int features, double **training_outpu
         layer *exp_layer = get_feature_layer(training_output[i], output_size);
         if (model->cost == BINARY_CROSS_ENTROPY)
         {
-            cost += binary_cross_entropy(pred, exp_layer, 16.67, 0.52);
+            cost += binary_cross_entropy(pred, exp_layer, tr_weight, fl_weight);
         }
         else if (model->cost == CATEGORICAL_CROSS_ENTROPY)
         {

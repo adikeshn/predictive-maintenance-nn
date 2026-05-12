@@ -4,11 +4,28 @@
 #include "headers/free_structs.h"
 #include "headers/evaluate.h"
 #include "headers/cost.h"
+#include "headers/init.h"
 
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
 #include <assert.h>
+
+double **predict(net *net, double **X, int size)
+{
+    int features = net->num_features;
+    int outputs = net->layers[net->num_layers - 1].size;
+
+    double **out = malloc(sizeof(double *) * size);
+
+    for (int i = 0; i < size; i++)
+    {
+        layer *f_layer = get_feature_layer(X[i], features);
+        layer *pred = forward_pass(net, f_layer);
+        out[i] = layer_to_array(pred);
+    }
+    return out;
+}
 
 double eval(net *net, double **X, double **y, int num_entries)
 {
@@ -22,7 +39,7 @@ double eval(net *net, double **X, double **y, int num_entries)
         layer *pred = forward_pass(net, f_layer);
         if (num_output == 1)
         {
-            cost += binary_cross_entropy(pred, o_layer, 16.67, 0.52);
+            cost += binary_cross_entropy(pred, o_layer, tr_weight, fl_weight);
         }
         else
         {
@@ -86,7 +103,7 @@ net *back_prop(net *sums, net *net, layer *features, layer *exp, double learning
         {
             if (i == 0)
             {
-                curr->neurons[j].value = cost_dev(curr->neurons[j].value, exp->neurons[j].value);
+                curr->neurons[j].value = weighted_cost_dev(curr->neurons[j].value, exp->neurons[j].value, tr_weight, fl_weight);
             }
             else
             {

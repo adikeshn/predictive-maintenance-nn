@@ -31,3 +31,8 @@ double cost_dev(double pred, double exp)
 {
     return pred - exp;
 }
+
+double weighted_cost_dev(double p, double y, double w_pos, double w_neg)
+{
+    return w_pos * y * (p - 1.0) + w_neg * (1.0 - y) * p;
+}

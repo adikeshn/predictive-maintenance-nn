@@ -7,6 +7,17 @@
 #include <assert.h>
 #include <stdlib.h>
 
+double *layer_to_array(layer *layer)
+{
+    double *data = malloc(sizeof(double) * layer->size);
+
+    for (int i = 0; i < layer->size; i++)
+    {
+        data[i] = layer->neurons[i].value;
+    }
+    return data;
+}
+
 void normalize(double **X, int num_entries, int num_features,
                double *means, double *stds)
 {
