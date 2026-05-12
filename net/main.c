@@ -3,6 +3,7 @@
 #include "headers/free_structs.h"
 #include "headers/structs.h"
 #include "headers/train.h"
+#include "headers/util.h"
 
 #include <stdio.h>
 #include <math.h>
@@ -26,6 +27,9 @@ int main()
     double **X = NULL;
     double **y = NULL;
     load_data(&X, &y, num_entries, num_features, neurons_each_layer[num_layers - 1]);
+    double *means = malloc(sizeof(double) * num_features);
+    double *stds = malloc(sizeof(double) * num_features);
+    normalize(X, num_entries, num_features, means, stds);
     net *model = train_model(init, epochs, batch_size, num_entries, X, num_features, y, neurons_each_layer[num_layers - 1], learning_rate);
     write_net("model.bin", model);
     net *read = read_net("model.bin");

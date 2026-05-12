@@ -7,6 +7,30 @@
 #include <assert.h>
 #include <stdlib.h>
 
+void normalize(double **X, int num_entries, int num_features,
+               double *means, double *stds)
+{
+    for (int j = 0; j < num_features; j++)
+    {
+        means[j] = 0.0;
+        for (int i = 0; i < num_entries; i++)
+            means[j] += X[i][j];
+        means[j] /= num_entries;
+    }
+
+    for (int j = 0; j < num_features; j++)
+    {
+        stds[j] = 0.0;
+        for (int i = 0; i < num_entries; i++)
+            stds[j] += pow(X[i][j] - means[j], 2);
+        stds[j] = sqrt(stds[j] / num_entries);
+    }
+
+    for (int i = 0; i < num_entries; i++)
+        for (int j = 0; j < num_features; j++)
+            X[i][j] = (X[i][j] - means[j]) / stds[j];
+}
+
 layer *get_feature_layer(double *entry, int size)
 {
     layer *layer = malloc(sizeof(layer));

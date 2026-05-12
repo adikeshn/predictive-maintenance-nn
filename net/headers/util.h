@@ -10,5 +10,6 @@ matrix *get_feature_matrix(layer prev);
 matrix *apply_activation(matrix *a, activation activation);
 layer *create_layer(matrix *inp, layer *layer);
 layer *get_feature_layer(double *entry, int size);
-
+void normalize(double **X, int num_entries, int num_features,
+               double *means, double *stds);
 #endif
