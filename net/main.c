@@ -20,6 +20,7 @@ int main()
     int epochs = 50;
     int batch_size = 32;
     double learning_rate = 0.01;
+    double train_percent = 0.8;
     activation actives[3] = {RELU, RELU, SIGMOID};
     net *init = gen_rand(num_features, num_layers, neurons_each_layer, actives, BINARY_CROSS_ENTROPY);
 
@@ -30,7 +31,10 @@ int main()
     double *means = malloc(sizeof(double) * num_features);
     double *stds = malloc(sizeof(double) * num_features);
     normalize(X, num_entries, num_features, means, stds);
-    net *model = train_model(init, epochs, batch_size, num_entries, X, num_features, y, neurons_each_layer[num_layers - 1], learning_rate);
+
+    net *model = train_model(init, epochs, batch_size, num_entries, X,
+                             num_features, y, neurons_each_layer[num_layers - 1], learning_rate, train_percent);
+
     write_net("model.bin", model);
     net *read = read_net("model.bin");
 

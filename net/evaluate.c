@@ -10,6 +10,28 @@
 #include <stdlib.h>
 #include <assert.h>
 
+double eval(net *net, double **X, double **y, int num_entries)
+{
+    int features = net->num_features;
+    int num_output = net->layers[net->num_layers - 1].size;
+    double cost = 0.0;
+    for (int i = 0; i < num_entries; i++)
+    {
+        layer *f_layer = get_feature_layer(X[i], features);
+        layer *o_layer = get_feature_layer(y[i], num_output);
+        layer *pred = forward_pass(net, f_layer);
+        if (num_output == 1)
+        {
+            cost += binary_cross_entropy(pred, o_layer);
+        }
+        else
+        {
+            cost += categorical_cross_entropy(pred, o_layer);
+        }
+    }
+    return cost / num_entries;
+}
+
 layer *forward_pass(net *net, layer *features)
 {
     assert(net);

@@ -29,16 +29,23 @@ void fisher_shuffle(double **inp, double **out, int num_entries)
     }
 }
 
-net *train_model(net *model, int epochs, int batch_size, int num_entries, double **training_features,
-                 int num_features, double **training_output, int output_size, double rate)
+net *train_model(net *model, int epochs, int batch_size, int num_entries, double **X,
+                 int num_features, double **y, int output_size, double rate, double train_percent)
 {
     assert(model);
+    assert(X);
+    assert(y);
+
+    int test_size = (num_entries - (int)(num_entries * train_percent));
+    double **training_features = X + test_size;
+    double **training_output = y + test_size;
 
     net *sums_net = malloc(sizeof(net));
     sums_net->num_features = model->num_features;
     sums_net->num_layers = model->num_layers;
     sums_net->layers = malloc(sizeof(layer) * sums_net->num_layers);
     sums_net->cost = EMPTY;
+
     for (int i = 0; i < model->num_layers; i++)
     {
         sums_net->layers[i].size = model->layers[i].size;
@@ -56,16 +63,20 @@ net *train_model(net *model, int epochs, int batch_size, int num_entries, double
         int batches = 0;
         int total_batches = num_entries % batch_size == 0 ? num_entries / batch_size : num_entries / batch_size + 1;
         double avg_cost = 0.0;
+        double avg_cost_test = 0.0;
         for (int j = 0; j < num_entries; j += batch_size)
         {
             int batch = j + batch_size >= num_entries ? num_entries - j : batch_size;
             double cost = train_batch((training_features + j), num_features, (training_output + j), output_size, batch, model, sums_net, rate);
             avg_cost += cost;
+            double test = eval(model, X, y, test_size);
+            avg_cost_test += test;
             batches++;
-            printf("\rEpoch %d/%d, Batch %d/%d, Loss %.6f", i + 1, epochs, batches, total_batches, cost);
+            printf("\rEpoch %d/%d, Batch %d/%d, Tr_Loss %.6f, Test_Loss %.6f", i + 1, epochs, batches, total_batches, cost, test);
             fflush(stdout);
         }
-        printf("\rEpoch %d/%d, Batch %d/%d, Loss %.6f", i + 1, epochs, batches, total_batches, avg_cost / total_batches);
+        printf("\rEpoch %d/%d, Batch %d/%d, Tr_Loss %.6f, Test_Loss %.6f", i + 1, epochs, batches,
+               total_batches, avg_cost / total_batches, avg_cost_test / total_batches);
         printf("\n");
     }
 
