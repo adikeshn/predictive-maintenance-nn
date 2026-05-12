@@ -34,6 +34,7 @@ net *read_net(char *file_name)
     net *out = malloc(sizeof(net));
     fread(&out->num_features, sizeof(int), 1, fp);
     fread(&out->num_layers, sizeof(int), 1, fp);
+    fread(&out->cost, sizeof(int), 1, fp);
 
     out->layers = malloc(sizeof(layer) * out->num_layers);
     int prev_size = out->num_features;
@@ -67,6 +68,7 @@ void write_net(char *file_name, net *net)
 
     fwrite(&net->num_features, sizeof(int), 1, fp);
     fwrite(&net->num_layers, sizeof(int), 1, fp);
+    fwrite(&net->cost, sizeof(int), 1, fp);
 
     for (int i = 0; i < net->num_layers; i++)
     {
@@ -84,6 +86,7 @@ void write_net(char *file_name, net *net)
             }
         }
     }
+    fclose(fp);
 }
 
 net *gen_rand(int num_features, int num_hidden, int *hidden_neurons, activation *activations, cost_funcs func)
@@ -162,4 +165,5 @@ void load_data(double ***X, double ***y, int num_entries, int num_features, int 
             i++;
         }
     }
+    fclose(fp);
 }

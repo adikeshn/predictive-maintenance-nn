@@ -21,14 +21,14 @@ net *forward_pass(net *net, layer *features)
         curr = &net->layers[i];
 
         matrix *weights = get_weights_matrix(*curr, *prev);
-        matrix *features = get_feature_matrix(*prev);
+        matrix *features_matrix = get_feature_matrix(*prev);
 
-        matrix *updated = matrix_mult(weights, features);
+        matrix *updated = matrix_mult(weights, features_matrix);
 
         free_matrix(weights);
-        free_matrix(features);
+        free_matrix(features_matrix);
         weights = NULL;
-        features = NULL;
+        features_matrix = NULL;
 
         for (int j = 0; j < updated->rows; j++)
         {
@@ -36,11 +36,6 @@ net *forward_pass(net *net, layer *features)
         }
         apply_activation(updated, curr->activation);
 
-        if (prev != features)
-        {
-            free_layer(prev);
-            free(prev);
-        }
         prev = create_layer(updated, curr);
         free_matrix(updated);
         updated = NULL;

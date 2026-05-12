@@ -50,7 +50,7 @@ void free_2D(double ***arr, int rows)
 {
     for (int i = 0; i < rows; i++)
     {
-        free(arr[i]);
+        free((*arr)[i]);
     }
-    free(arr);
+    free((*arr));
 }

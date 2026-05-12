@@ -16,7 +16,7 @@ void fisher_shuffle(double **inp, double **out, int num_entries)
 {
     for (int i = num_entries - 1; i > 0; i--)
     {
-        int swap_index = rand() % (i + 1);
+        int swap_index = random() % (i + 1);
 
         double *temp = inp[i];
         inp[i] = inp[swap_index];
