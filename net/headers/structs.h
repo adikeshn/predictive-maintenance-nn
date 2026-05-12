@@ -18,12 +18,6 @@ typedef enum cost_funcs
     NONE = 2,
 } cost_funcs;
 
-typedef struct cost
-{
-    double cost;
-    cost_funcs type;
-} cost;
-
 typedef struct matrix
 {
     double **arr;
@@ -51,6 +45,8 @@ typedef struct net
     layer *layers;
     int num_layers;
     int num_features;
+    cost_funcs cost;
+
 } net;
 
 #endif

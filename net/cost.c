@@ -5,7 +5,7 @@
 #include <math.h>
 #include <assert.h>
 
-cost categorical_cross_entropy(layer *pred, layer *exp)
+double categorical_cross_entropy(layer *pred, layer *exp)
 {
     assert(pred);
     assert(exp);
@@ -16,15 +16,15 @@ cost categorical_cross_entropy(layer *pred, layer *exp)
     {
         c += log(pred->neurons[i].value) * exp->neurons[i].value;
     }
-    return (cost){-c, CATEGORICAL_CROSS_ENTROPY};
+    return -c;
 }
 
-cost binary_cross_entropy(layer *pred, layer *exp)
+double binary_cross_entropy(layer *pred, layer *exp)
 {
     double prediction = pred->neurons[0].value;
     double expected = exp->neurons[0].value;
 
-    return (cost){-(expected * log(prediction) + (1 - expected) * log(1 - prediction)), BINARY_CROSS_ENTROPY};
+    return -(expected * log(prediction) + (1 - expected) * log(1 - prediction));
 }
 
 double cost_dev(double pred, double exp)

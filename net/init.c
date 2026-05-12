@@ -80,12 +80,13 @@ void write_net(char *file_name, net *net)
     }
 }
 
-net *gen_rand(int num_features, int num_hidden, int *hidden_neurons, activation *activations)
+net *gen_rand(int num_features, int num_hidden, int *hidden_neurons, activation *activations, cost_funcs func)
 {
 
     net *out = malloc(sizeof(net));
     out->num_features = num_features;
     out->num_layers = num_hidden;
+    out->cost = func;
     out->layers = malloc(sizeof(layer) * out->num_layers);
 
     int prev_size = out->num_features;

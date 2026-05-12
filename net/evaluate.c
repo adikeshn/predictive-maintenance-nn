@@ -40,7 +40,8 @@ net *forward_pass(net *net, layer *features)
         free_matrix(updated);
         updated = NULL;
     }
-    return net;
+
+    return prev;
 }
 
 net *back_prop(net *sums, net *net, layer *features, layer *exp, double learning_rate)

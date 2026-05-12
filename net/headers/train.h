@@ -4,6 +4,11 @@
 #include <stdio.h>
 #include "structs.h"
 
-net *train_model(net *model, int epochs, int batch_size, double **training_data);
+void fisher_shuffle(double **inp, double **out, int num_entries);
 
+net *train_model(net *model, int epochs, int batch_size, int num_entries, double **training_features,
+                 int num_features, double **training_output, int output_size, double rate);
+
+double train_batch(double **training_data, int features, double **training_output, int output_size,
+                   int batch_size, net *model, net *sums_net, double rate);
 #endif

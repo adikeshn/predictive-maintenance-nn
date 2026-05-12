@@ -4,8 +4,8 @@
 #include <stdio.h>
 #include "structs.h"
 
-cost categorical_cross_entropy(layer *pred, layer *exp);
+double categorical_cross_entropy(layer *pred, layer *exp);
 double cost_dev(double pred, double exp);
-cost binary_cross_entropy(layer *pred, layer *exp);
+double binary_cross_entropy(layer *pred, layer *exp);
 
 #endif

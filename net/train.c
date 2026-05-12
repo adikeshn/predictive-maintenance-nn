@@ -2,6 +2,7 @@
 #include "headers/evaluate.h"
 #include "headers/free_structs.h"
 #include "headers/structs.h"
+#include "headers/cost.h"
 #include "headers/util.h"
 
 #include <stdio.h>
@@ -11,10 +12,27 @@
 #include <time.h>
 #include <string.h>
 
+void fisher_shuffle(double **inp, double **out, int num_entries)
+{
+    for (int i = num_entries - 1; i > 0; i--)
+    {
+        int swap_index = rand() % (i + 1);
+
+        double *temp = inp[i];
+        inp[i] = inp[swap_index];
+        inp[swap_index] = temp;
+
+        temp = out[i];
+        out[i] = out[swap_index];
+        out[swap_index] = temp;
+    }
+}
+
 net *train_model(net *model, int epochs, int batch_size, int num_entries, double **training_features,
                  int num_features, double **training_output, int output_size, double rate)
 {
     assert(model);
+    srandom(time(NULL));
 
     net *sums_net = malloc(sizeof(net));
     sums_net->num_features = model->num_features;
@@ -33,14 +51,14 @@ net *train_model(net *model, int epochs, int batch_size, int num_entries, double
     }
     for (int i = 0; i < epochs; i++)
     {
-        printf("epoch %d\n", i + 1);
-        /* shuffle training unimplemented */
+        fisher_shuffle(training_features, training_output, num_entries);
         int batches = 0;
         for (int j = 0; j < num_entries; j += batch_size)
         {
-            printf("training batch %d", batches + 1);
             int batch = j + batch_size >= num_entries ? num_entries - j : batch_size;
-            train_batch((training_features + j), num_features, (training_output + j), output_size, batch, model, sums_net, rate);
+            double cost = train_batch((training_features + j), num_features, (training_output + j), output_size, batch, model, sums_net, rate);
+            printf("\rEpoch %d/%d, Batch %d, Loss %.6f", i + 1, epochs, batches, cost);
+            fflush(stdout);
             batches++;
         }
     }
@@ -49,8 +67,8 @@ net *train_model(net *model, int epochs, int batch_size, int num_entries, double
     return model;
 }
 
-net *train_batch(double **training_data, int features, double **training_output, int output_size,
-                 int batch_size, net *model, net *sums_net, double rate)
+double train_batch(double **training_data, int features, double **training_output, int output_size,
+                   int batch_size, net *model, net *sums_net, double rate)
 {
     assert(model);
     assert(training_data);
@@ -63,27 +81,35 @@ net *train_batch(double **training_data, int features, double **training_output,
             sums_net->layers[i].neurons[j].bias = 0.0;
         }
     }
-
+    double cost = 0.0;
     for (int i = 0; i < batch_size; i++)
     {
         double *entry = training_data[i];
         layer *features_layer = get_feature_layer(entry, features);
-        forward_pass(model, features_layer);
-        layer *exp = get_feature_layer(training_output[i], output_size);
-        back_prop(sums_net, model, features_layer, exp, rate);
+        layer *pred = forward_pass(model, features_layer);
+        layer *exp_layer = get_feature_layer(training_output[i], output_size);
+        if (model->cost == BINARY_CROSS_ENTROPY)
+        {
+            cost += binary_cross_entropy(pred, exp_layer);
+        }
+        else if (model->cost == CATEGORICAL_CROSS_ENTROPY)
+        {
+            cost += categorical_cross_entropy(pred, exp_layer);
+        }
+        back_prop(sums_net, model, features_layer, exp_layer, rate);
         free_layer(features_layer);
         free(features_layer);
         features_layer = NULL;
-        free_layer(exp);
-        free(exp);
-        exp = NULL;
+        free_layer(exp_layer);
+        free(exp_layer);
+        exp_layer = NULL;
     }
 
     for (int i = 0; i < model->num_layers; i++)
     {
         for (int j = 0; j < model->layers[i].size; j++)
         {
-            model->layers[i].neurons[j].bias += sums_net->layers[i].neurons[j].bias / batch_size;
+            model->layers[i].neurons[j].bias -= sums_net->layers[i].neurons[j].bias / batch_size;
             for (int z = 0; z < model->layers[i].neurons->weight_size; z++)
             {
                 model->layers[i].neurons[j].weights[z] -= sums_net->layers[i].neurons[j].weights[z] / batch_size;
@@ -91,5 +117,5 @@ net *train_batch(double **training_data, int features, double **training_output,
         }
     }
 
-    return model;
+    return cost;
 }
