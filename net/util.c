@@ -120,7 +120,7 @@ matrix *matrix_mult(matrix *a, matrix *b)
     for (int i = 0; i < out->rows; i++)
     {
         (out->arr)[i] = malloc(sizeof(double) * out->cols);
-        assert(out->arr);
+        assert(out->arr[i]);
     }
 
     for (int i = 0; i < a->rows; i++)

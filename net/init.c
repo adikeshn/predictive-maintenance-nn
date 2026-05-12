@@ -7,7 +7,7 @@
 
 double random_double(double min, double max)
 {
-    double scale = (double)random() / (double)RAND_MAX;
+    double scale = (double)random() / (double)0x7FFFFFFF;
     return min + scale * (max - min);
 }
 
