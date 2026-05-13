@@ -14,7 +14,6 @@
 double **predict(net *net, double **X, int size)
 {
     int features = net->num_features;
-    int outputs = net->layers[net->num_layers - 1].size;
 
     double **out = malloc(sizeof(double *) * size);
 
@@ -23,6 +22,9 @@ double **predict(net *net, double **X, int size)
         layer *f_layer = get_feature_layer(X[i], features);
         layer *pred = forward_pass(net, f_layer);
         out[i] = layer_to_array(pred);
+
+        free_layer(f_layer);
+        free(f_layer);
     }
     return out;
 }
@@ -103,7 +105,10 @@ net *back_prop(net *sums, net *net, layer *features, layer *exp, double learning
         {
             if (i == 0)
             {
-                curr->neurons[j].value = weighted_cost_dev(curr->neurons[j].value, exp->neurons[j].value, tr_weight, fl_weight);
+                if (exp->size == 1)
+                    curr->neurons[j].value = weighted_cost_dev(curr->neurons[j].value, exp->neurons[j].value, tr_weight, fl_weight);
+                else
+                    curr->neurons[j].value = cost_dev(curr->neurons[j].value, exp->neurons[j].value);
             }
             else
             {

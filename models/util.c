@@ -40,6 +40,29 @@ void normalize(double **X, int num_entries, int num_features,
     for (int i = 0; i < num_entries; i++)
         for (int j = 0; j < num_features; j++)
             X[i][j] = (X[i][j] - means[j]) / stds[j];
+    FILE *fp = fopen("normalize.bin", "wb");
+    assert(fp);
+    fwrite(means, sizeof(double), num_features, fp);
+    fwrite(stds, sizeof(double), num_features, fp);
+    fclose(fp);
+}
+
+void normalize_input(double **x, int size, int num_features)
+{
+    double means[num_features];
+    double stds[num_features];
+
+    FILE *fp = fopen("normalize.bin", "rb");
+    assert(fp);
+    fread(means, sizeof(double), num_features, fp);
+    fread(stds, sizeof(double), num_features, fp);
+    fclose(fp);
+    for (int j = 0; j < size; j++)
+    {
+
+        for (int i = 0; i < num_features; i++)
+            x[j][i] = (x[j][i] - means[i]) / stds[i];
+    }
 }
 
 layer *get_feature_layer(double *entry, int size)

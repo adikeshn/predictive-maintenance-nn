@@ -62,7 +62,7 @@ net *train_model(net *model, int epochs, int batch_size, int num_entries, double
     {
         fisher_shuffle(training_features, training_output, train_size);
         int batches = 0;
-        double rate_decay = rate * (1.0 / (1.0 + 0.01 * i));
+        double rate_decay = rate; //* (1.0 / (1.0 + 0.01 * i));
         int total_batches = train_size % batch_size == 0 ? train_size / batch_size : train_size / batch_size + 1;
         double avg_cost = 0.0;
         for (int j = 0; j < train_size; j += batch_size)

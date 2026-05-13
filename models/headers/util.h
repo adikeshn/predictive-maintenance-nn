@@ -4,6 +4,7 @@
 #include "structs.h"
 #include <stdio.h>
 
+void normalize_input(double **x, int size, int num_features);
 double *layer_to_array(layer *layer);
 matrix *matrix_mult(matrix *a, matrix *b);
 matrix *get_weights_matrix(layer curr, layer prev);
