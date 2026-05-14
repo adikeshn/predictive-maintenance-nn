@@ -164,14 +164,11 @@ function App() {
     <main className="app-shell">
       <header className="hero">
         <div>
-          <div className="eyebrow">
-            <Cpu size={18} />C Neural Network + FastAPI
-          </div>
           <h1>Predictive Maintenance Simulator</h1>
           <p>
-            Simulate machine conditions, stream the inputs as live graphs, and
-            auto-fetch the model output while the system runs. Failure risk
-            prediction implemented using a neural net built from scratch in C.
+            Simulate machine conditions and auto-fetch the model output while
+            the system runs. Failure risk prediction implemented using a neural
+            net built from scratch in C.
           </p>
         </div>
 
