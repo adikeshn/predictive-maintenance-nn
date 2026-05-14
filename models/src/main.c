@@ -11,8 +11,6 @@
 #include <stdlib.h>
 #include <time.h>
 
-double tr_weight = 14.7; // 14.7
-double fl_weight = 0.52; // 0.52
 void train_models();
 void test_models();
 
@@ -50,13 +48,14 @@ void test_models()
 
     int n = 9;
 
-    normalize_input(test_inputs, n, 5);
+    normalize_input("normalize.bin", test_inputs, n, 5);
 
     double **preds = predict(model, test_inputs, n);
 
     for (int i = 0; i < n; i++)
         printf("%-12s → risk: %.4f\n", labels[i], preds[i][0]);
 }
+
 void train_models()
 {
     srandom(2);

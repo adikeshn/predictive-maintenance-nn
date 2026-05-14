@@ -47,12 +47,12 @@ void normalize(double **X, int num_entries, int num_features,
     fclose(fp);
 }
 
-void normalize_input(double **x, int size, int num_features)
+void normalize_input(char *filename, double **x, int size, int num_features)
 {
     double means[num_features];
     double stds[num_features];
 
-    FILE *fp = fopen("normalize.bin", "rb");
+    FILE *fp = fopen(filename, "rb");
     assert(fp);
     fread(means, sizeof(double), num_features, fp);
     fread(stds, sizeof(double), num_features, fp);
