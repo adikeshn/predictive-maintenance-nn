@@ -17,14 +17,16 @@ double fl_weight = 0.52; // 0.52
 
 double predict_percent(double *inp)
 {
-    /*const char *model_dir = getenv("MODEL_DIR");
-    char path[512];
-    snprintf(path, sizeof(path), "%s/failure_percent_model.bin", model_dir);*/
+    const char *model_dir = getenv("MODEL_DIR");
+    char path_model[512];
+    char path_normalize[512];
+    snprintf(path_model, sizeof(path_model), "%s/failure_percent_model.bin", model_dir);
+    snprintf(path_normalize, sizeof(path_normalize), "%s/normalize.bin", model_dir);
 
-    net *model = read_net("/Users/AdikeshNathan_1/Documents/GitHub/activitynet-c/models/failure_percent.bin");
+    net *model = read_net(path_model);
 
     double *i[] = {inp};
-    normalize_input("/Users/AdikeshNathan_1/Documents/GitHub/activitynet-c/models/normalize.bin", i, 1, 5);
+    normalize_input(path_normalize, i, 1, 5);
 
     double **pred = predict(model, i, 1);
     double p = pred[0][0];
@@ -36,15 +38,16 @@ double predict_percent(double *inp)
 
 int predict_category(double *inp)
 {
-    /*
     const char *model_dir = getenv("MODEL_DIR");
-    char path[512];
-    snprintf(path, sizeof(path), "%s/failure_percent_model.bin", model_dir); */
+    char path_model[512];
+    char path_normalize[512];
+    snprintf(path_model, sizeof(path_model), "%s/failure_percent_model.bin", model_dir);
+    snprintf(path_normalize, sizeof(path_normalize), "%s/normalize.bin", model_dir);
 
-    net *model = read_net("/Users/AdikeshNathan_1/Documents/GitHub/activitynet-c/models/category_model.bin");
+    net *model = read_net(path_model);
 
     double *i[] = {inp};
-    normalize_input("/Users/AdikeshNathan_1/Documents/GitHub/activitynet-c/models/normalize.bin", i, 1, 5);
+    normalize_input(path_normalize, i, 1, 5);
 
     double **pred = predict(model, i, 1);
     double max = 0.0;
