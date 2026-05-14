@@ -1,6 +1,6 @@
 export const API_URL = import.meta.env.VITE_API_URL ?? "http://127.0.0.1:8000/predict"
 export const HISTORY_LIMIT = 50
-export const SIMULATION_INTERVAL_MS = 249
+export const SIMULATION_INTERVAL_MS = 250
 export const PREDICTION_INTERVAL_MS = 1200
 
 export const NORMAL_MACHINE = {
