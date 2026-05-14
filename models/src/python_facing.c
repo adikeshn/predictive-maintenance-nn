@@ -20,7 +20,7 @@ double predict_percent(double *inp)
     const char *model_dir = getenv("MODEL_DIR");
     char path_model[512];
     char path_normalize[512];
-    snprintf(path_model, sizeof(path_model), "%s/failure_percent_model.bin", model_dir);
+    snprintf(path_model, sizeof(path_model), "%s/failure_percent.bin", model_dir);
     snprintf(path_normalize, sizeof(path_normalize), "%s/normalize.bin", model_dir);
 
     net *model = read_net(path_model);
@@ -41,7 +41,7 @@ int predict_category(double *inp)
     const char *model_dir = getenv("MODEL_DIR");
     char path_model[512];
     char path_normalize[512];
-    snprintf(path_model, sizeof(path_model), "%s/failure_percent_model.bin", model_dir);
+    snprintf(path_model, sizeof(path_model), "%s/category_model.bin", model_dir);
     snprintf(path_normalize, sizeof(path_normalize), "%s/normalize.bin", model_dir);
 
     net *model = read_net(path_model);
