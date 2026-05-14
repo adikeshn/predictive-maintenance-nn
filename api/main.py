@@ -5,9 +5,9 @@ from pydantic import BaseModel
 import ctypes
 
 BASE_DIR = Path(__file__).resolve().parent
-MODEL_PATH = BASE_DIR.parent / "models" / "libmodel.so"
+LIB_PATH = BASE_DIR / "machine_failure.so"
 
-lib = ctypes.CDLL('machine_failure.so')
+lib = ctypes.CDLL(str(LIB_PATH))
 lib.predict_percent.argtypes = [ctypes.POINTER(ctypes.c_double)]
 lib.predict_percent.restype = ctypes.c_double
 lib.predict_category.argtypes = [ctypes.POINTER(ctypes.c_double)]
