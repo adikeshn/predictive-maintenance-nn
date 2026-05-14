@@ -7,3 +7,7 @@ node_modules
 site/node_modules
 site/dist
 .DS_Store
+
+api/machine_failure.so
+api/__pycache__
+models/src/build
